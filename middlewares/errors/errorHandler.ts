@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import CustomError from "../../helpers/error/CustomError"
-import extractMongooseError from "../../utils/error/extractMongooseError"
+import extractMongoServerError from "../../utils/error/extractMongoServerError"
 import { MongoServerError } from "mongodb"
 
 const errorHandler = (
@@ -11,7 +11,7 @@ const errorHandler = (
 ) => {
   let customError = err
 
-  // Fields which are unique
+  //? For fields which are unique
   if ("code" in err && err.code === 11000) {
     const mongoServerError = err as MongoServerError
 
@@ -27,7 +27,7 @@ const errorHandler = (
       customError = new CustomError("Unexpected Syntax", 400)
       break
     case "ValidationError":
-      customError = new CustomError(extractMongooseError(err.message), 400)
+      customError = new CustomError(extractMongoServerError(err.message), 400)
       break
   }
 
