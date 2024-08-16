@@ -1,14 +1,26 @@
 import { NextFunction, Request, Response } from "express"
 import CustomError from "../../helpers/error/CustomError"
 import extractMongooseError from "../../utils/error/extractMongooseError"
+import { MongoServerError } from "mongodb"
 
 const errorHandler = (
-  err: CustomError,
+  err: CustomError | MongoServerError,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   let customError = err
+
+  // Fields which are unique
+  if ("code" in err && err.code === 11000) {
+    const mongoServerError = err as MongoServerError
+
+    if (mongoServerError.keyPattern.email)
+      customError = new CustomError(
+        "This email has been used. Please, provide a different email.",
+        400
+      )
+  }
 
   switch (err.name) {
     case "SyntaxError":
