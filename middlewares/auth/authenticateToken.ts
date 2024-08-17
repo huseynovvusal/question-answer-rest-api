@@ -29,6 +29,10 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     }
 
     console.log(decoded) //? Works
+    ;(req as any).user = {
+      id: decoded.id,
+      name: decoded.name,
+    }
   })
 
   next()

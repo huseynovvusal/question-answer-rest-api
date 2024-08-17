@@ -15,6 +15,7 @@ dotenv.config({
 
 // Environment Variables
 const PORT = process.env.PORT
+const NODE_ENV = process.env.NODE_ENV
 
 // Middlewares
 app.use(express.json())
@@ -30,5 +31,5 @@ app.use(errorHandler)
 connectDatabase()
 
 app.listen(PORT, () => {
-  console.log(`Server is running at PORT:${PORT}`)
+  console.log(`Server is running at PORT:${PORT} (${NODE_ENV})`)
 })

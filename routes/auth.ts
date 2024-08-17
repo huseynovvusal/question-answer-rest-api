@@ -1,13 +1,12 @@
 import express, { Request, Response } from "express"
-import { register } from "../controllers/auth"
+import { getUser, login, register } from "../controllers/auth"
 import authenticateToken from "../middlewares/auth/authenticateToken"
 
 const router = express.Router()
 
-router.get("/register", register)
+router.post("/register", register)
+router.post("/login", login)
 
-router.get("/tokentest", authenticateToken, (req, res) => {
-  res.json({ success: true })
-})
+router.get("/profile", authenticateToken, getUser)
 
 export default router
