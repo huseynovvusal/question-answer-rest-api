@@ -30,7 +30,7 @@ export const register = asyncErrorWrapper(
     const token = user.generateJwt()
 
     res
-      .status(200)
+      .status(201)
       .cookie("access_token", token, {
         httpOnly: true,
         expires: new Date(Date.now() + parseInt(JWT_COOKIE)),
@@ -38,7 +38,7 @@ export const register = asyncErrorWrapper(
       })
       .json({
         success: true,
-        user: { ...(user as any)._doc, password: undefined, __v: undefined },
+        user: { ...(user as any)._doc, password: undefined },
       })
   }
 )
@@ -50,7 +50,7 @@ export const login = asyncErrorWrapper(
     if (!validateLoginInput(email, password))
       next(new CustomError("PLease, check your inputs.", 400))
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }).select("+password")
 
     if (!user) return next(new CustomError("Invalid email or password.", 401))
 
@@ -71,8 +71,17 @@ export const login = asyncErrorWrapper(
       })
       .json({
         success: true,
-        user: { ...(user as any)._doc, password: undefined, __v: undefined },
+        user: { ...(user as any)._doc, password: undefined },
       })
+  }
+)
+
+export const logout = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).clearCookie("access_token").json({
+      success: true,
+      message: "Logged out successfully.",
+    })
   }
 )
 

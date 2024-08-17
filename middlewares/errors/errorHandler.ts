@@ -11,6 +11,9 @@ const errorHandler = (
 ) => {
   let customError = err
 
+  // !!
+  console.error(err)
+
   //? For fields which are unique
   if ("code" in err && err.code === 11000) {
     const mongoServerError = err as MongoServerError
