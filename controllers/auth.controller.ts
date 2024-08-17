@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import asyncErrorWrapper from "express-async-handler"
 import bcrypt from "bcryptjs"
 
-import User from "../models/User"
+import User from "../models/user.model"
 import { validateLoginInput } from "../helpers/auth/validateUserInput"
 import CustomError from "../helpers/error/CustomError"
 

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express"
 
-import auth from "./auth"
-import questions from "./questions"
+import auth from "./auth.route"
+import questions from "./questions.route"
 
 const router = express.Router()
 
