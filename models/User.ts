@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-import { Document } from "mongoose"
 import { IUser } from "../interfaces/user"
 
 const UserSchema: Schema<IUser> = new Schema(
@@ -29,7 +28,6 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       minlength: [6, "Please, provide a password with minimum length 6."],
       required: [true, "Please, provide a password."],
-      select: true, //!
     },
     title: { type: String },
     about: { type: String },

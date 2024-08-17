@@ -18,7 +18,7 @@ const errorHandler = (
     if (mongoServerError.keyPattern.email)
       customError = new CustomError(
         "This email has been used. Please, provide a different email.",
-        400
+        409
       )
   }
 
