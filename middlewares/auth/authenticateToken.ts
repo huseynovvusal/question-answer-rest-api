@@ -7,7 +7,7 @@ import dotenv from "dotenv"
 import path from "path"
 
 dotenv.config({
-  path: path.resolve(__dirname, "../../config/.env"),
+  path: path.join(__dirname, "../../config/.env"),
 })
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string

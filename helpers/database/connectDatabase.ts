@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import path from "path"
 
 dotenv.config({
-  path: path.resolve(__dirname, "../../config/.env"),
+  path: path.join(__dirname, "../../config/.env"),
 })
 
 const MONGO_URI = process.env.MONGO_URI as string

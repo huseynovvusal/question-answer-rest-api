@@ -10,7 +10,7 @@ import dotenv from "dotenv"
 import path from "path"
 
 dotenv.config({
-  path: path.resolve(__dirname, "../config/.env"),
+  path: path.join(__dirname, "../config/.env"),
 })
 
 const JWT_COOKIE = process.env.JWT_COOKIE as string
@@ -81,6 +81,27 @@ export const logout = asyncErrorWrapper(
     res.status(200).clearCookie("access_token").json({
       success: true,
       message: "Logged out successfully.",
+    })
+  }
+)
+
+export const uploadProfileImage = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { savedProfileImage } = req as any
+    const { id } = (req as any).user
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        profile_image: savedProfileImage,
+      },
+      { new: true, runValidators: true }
+    )
+
+    res.status(200).json({
+      success: true,
+      message: "Profile image is uploaded successfully.",
+      user: (user as any)._doc,
     })
   }
 )
