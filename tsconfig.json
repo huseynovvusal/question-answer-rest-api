@@ -15,9 +15,10 @@
     "noEmitOnError": true, // Avoid emitting files if there are any errors.
     "incremental": true, // Enable faster builds by storing information about previous builds.
     "sourceMap": true, // Generate source maps for debugging.
-    "baseUrl": "./src", // Base directory for resolving non-relative module names.
+    "baseUrl": "./", // Base directory for resolving non-relative module names.
     "paths": {
-      "@/*": ["src/*"] // Set up aliasing for cleaner imports.
+      "@/*": ["src/*"],
+      "@helpers/*": ["src/helpers/*"]
     }
   },
   "include": ["src/**/*.ts"], // Include all TypeScript files in the src directory.

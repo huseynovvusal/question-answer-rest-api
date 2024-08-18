@@ -11,6 +11,9 @@ export interface IUser extends Document {
   website: string
   profile_image: string
   blocked: boolean
+  resetPasswordToken?: string
+  resetPasswordExpire?: Date
 
   generateJwt(): string
+  getResetPasswordToken(): string
 }

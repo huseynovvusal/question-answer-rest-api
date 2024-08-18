@@ -8,6 +8,9 @@ import CustomError from "../helpers/error/CustomError"
 
 import dotenv from "dotenv"
 import path from "path"
+import { IUser } from "../interfaces/user"
+import sendEmail from "../helpers/libraries/sendEmail"
+import { resetPasswordEmailTemplate } from "../templates/email.template"
 
 dotenv.config({
   path: path.join(__dirname, "../config/.env"),
@@ -103,6 +106,49 @@ export const uploadProfileImage = asyncErrorWrapper(
       message: "Profile image is uploaded successfully.",
       user: (user as any)._doc,
     })
+  }
+)
+
+export const forgotPassword = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const SMTP_USER = process.env.SMTP_USER as string
+
+    const { resetEmail } = req.body
+
+    const user: IUser | null = await User.findOne({ email: resetEmail })
+
+    if (!user) {
+      return next(new CustomError("There is no user with that email.", 400))
+    }
+
+    const resetPasswordToken = user.getResetPasswordToken()
+
+    await user.save()
+
+    const resetPasswordUrl = `httpL//localhost:5000/api/auth/reset-password?resetPasswordToken=${resetPasswordToken}`
+
+    const emailTemplate = resetPasswordEmailTemplate(resetPasswordUrl)
+
+    try {
+      await sendEmail({
+        from: SMTP_USER,
+        to: resetEmail,
+        subject: "Reset Your Password",
+        html: emailTemplate,
+      })
+
+      return res.status(200).json({
+        success: true,
+        message: "Token is sent to your email address.",
+      })
+    } catch (error) {
+      user.resetPasswordToken = undefined
+      user.resetPasswordExpire = undefined
+
+      await user.save()
+
+      return next(new CustomError("Email could not be sent", 500))
+    }
   }
 )
 

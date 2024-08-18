@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import crypto from "crypto"
 
 import { IUser } from "../interfaces/user"
 
@@ -39,6 +40,8 @@ const UserSchema: Schema<IUser> = new Schema(
       type: Boolean,
       default: false,
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
   { timestamps: true }
 )
@@ -58,6 +61,24 @@ UserSchema.methods.generateJwt = function (): string {
   })
 
   return token
+}
+
+UserSchema.methods.getResetPasswordToken = function (this: IUser): string {
+  const RESET_PASSWORD_EXPIRE = process.env.RESET_PASSWORD_EXPIRE as string
+
+  const randomHexString = crypto.randomBytes(15).toString("hex")
+
+  const resetPasswordToken = crypto
+    .createHash("SHA256")
+    .update(randomHexString)
+    .digest("hex")
+
+  this.resetPasswordToken = resetPasswordToken
+  this.resetPasswordExpire = new Date(
+    Date.now() + parseInt(RESET_PASSWORD_EXPIRE)
+  )
+
+  return resetPasswordToken
 }
 
 // Hooks

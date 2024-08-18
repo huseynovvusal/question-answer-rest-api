@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express"
 import {
+  forgotPassword,
   getUser,
   login,
   logout,
@@ -14,6 +15,7 @@ const router = express.Router()
 router.post("/register", register)
 router.post("/login", login)
 router.get("/logout", authenticateToken, logout)
+router.post("/forgot-password", forgotPassword)
 router.post(
   "/upload",
   [authenticateToken, (profileImageUpload as any).single("profile_image")],
