@@ -55,7 +55,7 @@ export const login = asyncErrorWrapper(
 
     const user = await User.findOne({ email }).select("+password")
 
-    if (!user) return next(new CustomError("Invalid email or password.", 401))
+    if (!user) return next(new CustomError("Wrong email or password.", 401))
 
     const isCorrectPassword = await bcrypt.compare(password, user.password)
 
@@ -149,6 +149,37 @@ export const forgotPassword = asyncErrorWrapper(
 
       return next(new CustomError("Email could not be sent", 500))
     }
+  }
+)
+
+export const resetPassword = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { resetPasswordToken } = req.query
+    const { password } = req.body
+
+    if (!resetPassword) {
+      return next(new CustomError("Please, provide a valid token.", 400))
+    }
+
+    let user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    })
+
+    if (!user) {
+      return next(new CustomError("Please, provide a valid token.", 400))
+    }
+
+    user.password = password
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpire = undefined
+
+    await user.save()
+
+    res.status(200).json({
+      success: true,
+      message: "Password is updated successfully.",
+    })
   }
 )
 

@@ -5,6 +5,7 @@ import {
   login,
   logout,
   register,
+  resetPassword,
 } from "../controllers/auth.controller"
 import authenticateToken from "../middlewares/auth/authenticateToken"
 import profileImageUpload from "../middlewares/libraries/profileImageUpload"
@@ -21,6 +22,8 @@ router.post(
   [authenticateToken, (profileImageUpload as any).single("profile_image")],
   uploadProfileImage
 )
+
+router.put("/reset-password", resetPassword)
 
 router.get("/profile", authenticateToken, getUser)
 
