@@ -1,22 +1,23 @@
 import { NextFunction, Request, Response } from "express"
 import asyncErrorWrapper from "express-async-handler"
-
 import User from "../models/user.model"
-import CustomError from "../helpers/error/CustomError"
 
 export const getSingleUser = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const { id } = req.params
+    return res.status(200).json({
+      success: true,
+      data: (req as any).user,
+    })
+  }
+)
 
-    const user = await User.findById(id)
-
-    if (!user) {
-      return next(new CustomError("User is not found.", 400))
-    }
+export const getAllUsers = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const users = await User.find({})
 
     return res.status(200).json({
       success: true,
-      data: user,
+      data: users,
     })
   }
 )
