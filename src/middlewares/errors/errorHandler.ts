@@ -12,7 +12,7 @@ const errorHandler = (
   let customError = err
 
   // !!
-  console.error(err)
+  // console.error(err)
 
   //? For fields which are unique
   if ("code" in err && err.code === 11000) {
@@ -31,6 +31,9 @@ const errorHandler = (
       break
     case "ValidationError":
       customError = new CustomError(extractMongoServerError(err.message), 400)
+      break
+    case "CastError":
+      customError = new CustomError("Please provide a valid ID.", 400)
       break
   }
 

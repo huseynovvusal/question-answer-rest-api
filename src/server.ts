@@ -1,17 +1,17 @@
-import express, { Express, Request, Response } from "express"
+import express from "express"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import path from "path"
 
-import api from "./routes"
+import api from "./routers"
 import connectDatabase from "./helpers/database/connectDatabase"
 import errorHandler from "./middlewares/errors/errorHandler"
 
-const app: Express = express()
+const app = express()
 
 // .env
 dotenv.config({
-  path: "./config/.env",
+  path: path.join(__dirname, "config", ".env"),
 })
 
 // Environment Variables
