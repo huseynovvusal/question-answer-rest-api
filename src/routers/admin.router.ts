@@ -9,6 +9,6 @@ const router = express.Router()
 router.use([authenticateToken, getAdminAccess])
 
 router.get("/block/:id", checkUserExist, blockUser)
-router.delete("/delete/user/:id", checkUserExist, deleteUser)
+router.delete("/user/:id", checkUserExist, deleteUser)
 
 export default router

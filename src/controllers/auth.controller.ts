@@ -8,7 +8,7 @@ import CustomError from "../helpers/error/CustomError"
 
 import dotenv from "dotenv"
 import path from "path"
-import { IUser } from "../interfaces/user"
+import { IDetailsUpdateQuery, IUser } from "../interfaces/user"
 import sendEmail from "../helpers/libraries/sendEmail"
 import { resetPasswordEmailTemplate } from "../templates/email.template"
 
@@ -179,6 +179,34 @@ export const resetPassword = asyncErrorWrapper(
     res.status(200).json({
       success: true,
       message: "Password is updated successfully.",
+    })
+  }
+)
+
+export const editDetails = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { title, about, place, website } = req.body
+
+    const updateQuery: IDetailsUpdateQuery = {}
+
+    if (title) updateQuery.title = title
+    if (about) updateQuery.about = about
+    if (place) updateQuery.place = place
+    if (website) updateQuery.website = website
+
+    const user = await User.findByIdAndUpdate(
+      (req as any).user.id,
+      updateQuery,
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+
+    res.status(200).json({
+      success: true,
+      message: "Profile is updated successfully.",
+      // data: user,
     })
   }
 )

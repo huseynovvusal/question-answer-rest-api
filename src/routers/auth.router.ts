@@ -1,5 +1,6 @@
 import express from "express"
 import {
+  editDetails,
   forgotPassword,
   getUser,
   login,
@@ -10,6 +11,7 @@ import {
 import authenticateToken from "../middlewares/auth/authenticateToken"
 import profileImageUpload from "../middlewares/libraries/profileImageUpload"
 import { uploadProfileImage } from "../controllers/auth.controller"
+import { checkUserExist } from "../middlewares/database/databaseErrorHelpers"
 
 const router = express.Router()
 
@@ -22,6 +24,8 @@ router.post(
   [authenticateToken, (profileImageUpload as any).single("profile_image")],
   uploadProfileImage
 )
+
+router.put("/edit", authenticateToken, editDetails)
 
 router.put("/reset-password", resetPassword)
 

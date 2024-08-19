@@ -17,3 +17,10 @@ export interface IUser extends Document {
   generateJwt(): string
   getResetPasswordToken(): string
 }
+
+export interface IDetailsUpdateQuery {
+  title?: string
+  about?: string
+  place?: string
+  website?: string
+}
