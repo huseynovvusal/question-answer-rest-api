@@ -5,4 +5,6 @@ export interface IQuestion extends Document {
   content: string
   slug: string
   user: typeof mongoose.Schema.ObjectId
+
+  makeSlug(): string
 }
