@@ -23,6 +23,11 @@ const errorHandler = (
         "This email has been used. Please, provide a different email.",
         409
       )
+    else if (mongoServerError.keyPattern.title)
+      customError = new CustomError(
+        "This title has been used. Please, provide a different title.",
+        409
+      )
   }
 
   switch (err.name) {
