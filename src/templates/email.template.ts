@@ -56,7 +56,7 @@ export const resetPasswordEmailTemplate = (resetPasswordURL: string) => {
 <body>
     <div class="container">
         <img src="https://images.pexels.com/photos/1062249/pexels-photo-1062249.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Password Reset">
-        <h1>Password Reset Request</h1>
+        <h1>Reset Your Password</h1>
         <p>We received a request to reset your password. If you didn't request this change, please ignore this email.</p>
         <p>To reset your password, click the button below:</p>
         <a href="${resetPasswordURL}" class="button">Reset Password</a>
