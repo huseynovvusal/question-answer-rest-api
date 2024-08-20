@@ -107,7 +107,6 @@ UserSchema.post(
     const userId = query._id
 
     if (userId) {
-      console.log("deleteOne", userId)
       await Question.deleteMany({ user: userId })
     }
   }

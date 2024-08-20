@@ -6,6 +6,7 @@ import {
   editQuestion,
   getAllQuestions,
   getSingleQuestion,
+  likeQuestion,
 } from "../controllers/question.controller"
 import { checkQuestionExist } from "../middlewares/database/databaseErrorHelpers"
 import getQuestionOwnerAccess from "../middlewares/auth/getQuestionOwnerAccess"
@@ -15,6 +16,11 @@ const router = express.Router()
 router.post("/ask", authenticateToken, askNewQuestion)
 router.get("/", getAllQuestions)
 router.get("/:id", checkQuestionExist, getSingleQuestion)
+router.get(
+  "/:questionId/like",
+  [authenticateToken, checkQuestionExist],
+  likeQuestion
+)
 router.put(
   "/:questionId/edit",
   [authenticateToken, checkQuestionExist, getQuestionOwnerAccess],

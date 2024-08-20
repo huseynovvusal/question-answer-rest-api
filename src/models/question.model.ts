@@ -26,6 +26,12 @@ const QuestionSchema: Schema<IQuestion> = new Schema(
       required: true,
       ref: "user",
     },
+    likes: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "user",
+      },
+    ],
   },
   { timestamps: true }
 )
