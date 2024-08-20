@@ -2,6 +2,7 @@ import express from "express"
 import authenticateToken from "../middlewares/auth/authenticateToken"
 import {
   askNewQuestion,
+  deleteQuestion,
   editQuestion,
   getAllQuestions,
   getSingleQuestion,
@@ -18,6 +19,11 @@ router.put(
   "/:questionId/edit",
   [authenticateToken, checkQuestionExist, getQuestionOwnerAccess],
   editQuestion
+)
+router.delete(
+  "/:questionId/delete",
+  [authenticateToken, checkQuestionExist, getQuestionOwnerAccess],
+  deleteQuestion
 )
 
 export default router

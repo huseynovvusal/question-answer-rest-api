@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import crypto from "crypto"
 
 import { IUser } from "../interfaces/user"
+import Question from "./question.model"
 
 const UserSchema: Schema<IUser> = new Schema(
   {
@@ -97,6 +98,20 @@ UserSchema.pre<IUser>("save", function (next) {
     })
   })
 })
+
+UserSchema.post(
+  "deleteOne",
+  { document: false, query: true },
+  async function () {
+    const query = this.getQuery()
+    const userId = query._id
+
+    if (userId) {
+      console.log("deleteOne", userId)
+      await Question.deleteMany({ user: userId })
+    }
+  }
+)
 
 const User = mongoose.model("user", UserSchema)
 

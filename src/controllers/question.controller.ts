@@ -58,3 +58,16 @@ export const editQuestion = asyncErrorWrapper(
     })
   }
 )
+
+export const deleteQuestion = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { questionId } = req.params
+
+    await Question.findByIdAndDelete(questionId)
+
+    res.status(200).json({
+      success: true,
+      message: "Question is deleted successfully.",
+    })
+  }
+)
