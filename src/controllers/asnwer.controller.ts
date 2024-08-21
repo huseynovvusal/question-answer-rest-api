@@ -43,3 +43,24 @@ export const getAllAnswersByQuestion = asyncErrorWrapper(
     })
   }
 )
+
+export const getSingleAnswer = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const answerId = (req as any).answer._id
+
+    const answer = await Answer.findById(answerId)
+      .populate({
+        path: "question",
+        select: "title",
+      })
+      .populate({
+        path: "user",
+        select: "name profile_image",
+      })
+
+    res.status(200).json({
+      success: true,
+      data: answer,
+    })
+  }
+)
