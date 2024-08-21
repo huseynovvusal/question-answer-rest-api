@@ -1,4 +1,5 @@
 import express from "express"
+
 import authenticateToken from "../middlewares/auth/authenticateToken"
 import {
   askNewQuestion,
@@ -10,6 +11,8 @@ import {
 } from "../controllers/question.controller"
 import { checkQuestionExist } from "../middlewares/database/databaseErrorHelpers"
 import getQuestionOwnerAccess from "../middlewares/auth/getQuestionOwnerAccess"
+
+import answer from "./answer.router"
 
 const router = express.Router()
 
@@ -31,5 +34,7 @@ router.delete(
   [authenticateToken, checkQuestionExist, getQuestionOwnerAccess],
   deleteQuestion
 )
+
+router.use("/:questionId/answers", checkQuestionExist, answer)
 
 export default router

@@ -32,6 +32,12 @@ const QuestionSchema: Schema<IQuestion> = new Schema(
         ref: "user",
       },
     ],
+    answers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "answer",
+      },
+    ],
   },
   { timestamps: true }
 )
