@@ -20,6 +20,7 @@ const NODE_ENV = process.env.NODE_ENV
 
 // Middlewares
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 // Static Files

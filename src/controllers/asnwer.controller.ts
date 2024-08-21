@@ -4,6 +4,7 @@ import Answer from "../models/answer.model"
 import CustomError from "../helpers/error/CustomError"
 import Question from "../models/question.model"
 import { IQuestion } from "../interfaces/question"
+import { IAnswer } from "../interfaces/answer"
 
 export const addNewAnswerToQuestion = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -57,6 +58,24 @@ export const getSingleAnswer = asyncErrorWrapper(
         path: "user",
         select: "name profile_image",
       })
+
+    res.status(200).json({
+      success: true,
+      data: answer,
+    })
+  }
+)
+
+export const editAnswer = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const answerId = (req as any).answer._id
+    const { content } = req.body
+
+    const answer = (await Answer.findById(answerId)) as IAnswer
+
+    answer.content = content
+
+    await answer.save()
 
     res.status(200).json({
       success: true,
