@@ -5,6 +5,7 @@ import {
   editAnswer,
   getAllAnswersByQuestion,
   getSingleAnswer,
+  likeAnswer,
 } from "../controllers/asnwer.controller"
 import authenticateToken from "../middlewares/auth/authenticateToken"
 import { checkQuestionAndAnswerExist } from "../middlewares/database/databaseErrorHelpers"
@@ -15,6 +16,11 @@ const router = express.Router({ mergeParams: true })
 router.post("/", authenticateToken, addNewAnswerToQuestion)
 router.get("/", getAllAnswersByQuestion)
 router.get("/:answerId", checkQuestionAndAnswerExist, getSingleAnswer)
+router.get(
+  "/:answerId/like",
+  [authenticateToken, checkQuestionAndAnswerExist],
+  likeAnswer
+)
 router.put(
   "/:answerId/edit",
   [checkQuestionAndAnswerExist, authenticateToken, getAnswerOwnerAccess],

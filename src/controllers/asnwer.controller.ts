@@ -103,3 +103,27 @@ export const deleteAnswer = asyncErrorWrapper(
     })
   }
 )
+
+export const likeAnswer = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { answerId } = req.params
+    const userId = (req as any).user.id
+
+    const answer = (await Answer.findById(answerId)) as IAnswer
+
+    if (answer.likes.includes(userId)) {
+      const index = answer.likes.indexOf((req as any).user.id)
+
+      answer.likes.splice(index, 1)
+    } else {
+      answer.likes.push(userId)
+    }
+
+    await answer.save()
+
+    res.status(200).json({
+      success: true,
+      data: answer,
+    })
+  }
+)
