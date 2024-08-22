@@ -83,3 +83,23 @@ export const editAnswer = asyncErrorWrapper(
     })
   }
 )
+
+export const deleteAnswer = asyncErrorWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const answerId = (req as any).answer._id
+    const { questionId } = req.params
+
+    await Answer.findByIdAndDelete(answerId)
+
+    const question = (await Question.findById(questionId)) as IQuestion
+
+    question.answers.splice(question.answers.indexOf(answerId), 1)
+
+    await question.save()
+
+    res.status(200).json({
+      success: true,
+      message: "Answer is deleted successfully.",
+    })
+  }
+)

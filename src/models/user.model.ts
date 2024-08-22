@@ -5,6 +5,7 @@ import crypto from "crypto"
 
 import { IUser } from "../interfaces/user"
 import Question from "./question.model"
+import Answer from "./answer.model"
 
 const UserSchema: Schema<IUser> = new Schema(
   {
@@ -108,6 +109,7 @@ UserSchema.post(
 
     if (userId) {
       await Question.deleteMany({ user: userId })
+      await Answer.deleteMany({ user: userId })
     }
   }
 )

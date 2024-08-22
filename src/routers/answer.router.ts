@@ -1,6 +1,7 @@
 import express from "express"
 import {
   addNewAnswerToQuestion,
+  deleteAnswer,
   editAnswer,
   getAllAnswersByQuestion,
   getSingleAnswer,
@@ -18,6 +19,11 @@ router.put(
   "/:answerId/edit",
   [checkQuestionAndAnswerExist, authenticateToken, getAnswerOwnerAccess],
   editAnswer
+)
+router.delete(
+  "/:answerId/delete",
+  [checkQuestionAndAnswerExist, authenticateToken, getAnswerOwnerAccess],
+  deleteAnswer
 )
 
 export default router
