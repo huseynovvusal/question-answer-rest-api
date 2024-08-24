@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, query, Request, Response } from "express"
 import asyncErrorWrapper from "express-async-handler"
 import Question from "../models/question.model"
 import { IQuestion } from "../interfaces/question"
@@ -22,7 +22,17 @@ export const askNewQuestion = asyncErrorWrapper(
 
 export const getAllQuestions = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const questions = await Question.find({})
+    const { search } = req.query
+
+    let query = Question.find()
+
+    if (search) {
+      const titleRegex = new RegExp(search as string, "i")
+
+      query = query.where({ title: titleRegex })
+    }
+
+    const questions = await query
 
     res.status(200).json({
       success: true,
