@@ -37,13 +37,15 @@ const questionQueryMiddleware = (
 
     query = questionSortHelper<typeof query>(query, req)
 
+    const total = await model.countDocuments()
+
     const paginationResult = await paginationHelper<IQuestion, typeof query>(
-      Question,
+      total,
       query,
       req
     )
 
-    query = paginationResult.query
+    if (paginationResult.query) query = paginationResult.query
     const pagination = paginationResult.pagination
 
     const queryResults = await query

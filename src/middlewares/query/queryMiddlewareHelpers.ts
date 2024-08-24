@@ -46,7 +46,7 @@ export function questionSortHelper<RT>(
 }
 
 export async function paginationHelper<T, RT>(
-  model: Model<T>,
+  total: number,
   query: Query<any, Document<unknown, any, T>, {}, any>,
   req: Request
 ) {
@@ -54,7 +54,6 @@ export async function paginationHelper<T, RT>(
   const limit = parseInt((req.query.limit || "5") as string)
   const startIndex = (page - 1) * limit
   const endIndex = page * limit
-  const total = await model.countDocuments()
 
   const pagination: IPagination = {}
 
@@ -73,7 +72,10 @@ export async function paginationHelper<T, RT>(
   }
 
   return {
-    query: query.skip(startIndex).limit(limit) as RT,
+    query:
+      query === undefined
+        ? undefined
+        : (query.skip(startIndex).limit(limit) as RT),
     pagination,
   }
 }

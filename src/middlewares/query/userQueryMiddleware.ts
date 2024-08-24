@@ -20,13 +20,15 @@ const userQueryMiddleware = (model: Model<IUser>) => {
 
     query = searchHelper<IUser, typeof query>("name", query, req)
 
+    const total = await model.countDocuments()
+
     const paginationResult = await paginationHelper<IUser, typeof query>(
-      User,
+      total,
       query,
       req
     )
 
-    query = paginationResult.query
+    if (paginationResult.query) query = paginationResult.query
     const pagination = paginationResult.pagination
 
     const queryResults = await query
