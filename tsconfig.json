@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext", // Use the latest ECMAScript features.
+    // "target": "ESNext", // Use the latest ECMAScript features.
     "module": "CommonJS", // Node.js uses CommonJS modules.
     "moduleResolution": "Node", // Resolve modules like Node.js.
     "outDir": "./dist", // Output directory for compiled files.
@@ -17,5 +17,5 @@
     "sourceMap": true // Generate source maps for debugging.
   },
   "include": ["src/**/*.ts"], // Include all TypeScript files in the src directory.
-  "exclude": ["node_modules", "dist"] // Exclude node_modules and dist directories.
+  "exclude": ["node_modules", "dist", "*.js"] // Exclude node_modules and dist directories.
 }

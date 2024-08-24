@@ -2,6 +2,9 @@ import express from "express"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import path from "path"
+import helmet from "helmet"
+import cors from 'cors'
+import hpp from "hpp"
 
 import api from "./routers"
 import connectDatabase from "./helpers/database/connectDatabase"
@@ -22,6 +25,9 @@ const NODE_ENV = process.env.NODE_ENV
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(helmet())
+app.use(hpp())
+app.use(cors())
 
 // Static Files
 app.use(express.static(path.join(__dirname, "public")))
