@@ -13,11 +13,24 @@ import { checkQuestionExist } from "../middlewares/database/databaseErrorHelpers
 import getQuestionOwnerAccess from "../middlewares/auth/getQuestionOwnerAccess"
 
 import answer from "./answer.router"
+import questionQueryMiddleware from "../middlewares/query/questionQueryMiddleware"
+import Question from "../models/question.model"
 
 const router = express.Router()
 
 router.post("/ask", authenticateToken, askNewQuestion)
-router.get("/", getAllQuestions)
+
+router.get(
+  "/",
+  questionQueryMiddleware(Question, {
+    population: {
+      path: "user",
+      select: "name profile_image",
+    },
+  }),
+  getAllQuestions
+)
+
 router.get("/:questionId", checkQuestionExist, getSingleQuestion)
 router.get(
   "/:questionId/like",

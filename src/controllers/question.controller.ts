@@ -22,78 +22,7 @@ export const askNewQuestion = asyncErrorWrapper(
 
 export const getAllQuestions = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const search = req.query.search
-
-    const populate = true
-    const populateObject = {
-      path: "user",
-      select: "name profile_image",
-    }
-
-    let query = Question.find()
-
-    if (search) {
-      const titleRegex = new RegExp(search as string, "i")
-
-      query = query.where({ title: titleRegex })
-    }
-
-    if (populate) query.populate(populateObject)
-
-    //? Pagination
-    const page = parseInt((req.query.page || "1") as string)
-    const limit = parseInt((req.query.limit || "5") as string)
-    const startIndex = (page - 1) * limit
-    const endIndex = page * limit
-    const total = await Question.countDocuments()
-
-    const pagination: {
-      previous?: {
-        page: number
-        limit: number
-      }
-      next?: {
-        page: number
-        limit: number
-      }
-    } = {}
-
-    if (startIndex > 0) {
-      pagination.previous = {
-        page: page - 1,
-        limit,
-      }
-    }
-
-    if (endIndex < total) {
-      pagination.next = {
-        page: page + 1,
-        limit,
-      }
-    }
-
-    query = query.skip(startIndex).limit(limit)
-
-    //? Sort
-    // most-answered | most-liked
-    const sortKey = req.query.sortBy
-
-    if (sortKey === "most-answered") {
-      query = query.sort("-answerCount")
-    } else if (sortKey === "most-liked") {
-      query = query.sort("-likeCount")
-    } else {
-      query = query.sort("-createdAt")
-    }
-
-    const questions = await query
-
-    res.status(200).json({
-      success: true,
-      count: questions.length,
-      data: questions,
-      pagination,
-    })
+    res.status(200).json((req as any).queryResult)
   }
 )
 
