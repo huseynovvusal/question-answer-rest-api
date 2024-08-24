@@ -33,7 +33,7 @@ const userQueryMiddleware = (model: Model<IUser>) => {
 
     const queryResults = await query
 
-    ;(req as any).queryResult = {
+    ;(res as any).queryResult = {
       success: true,
       count: queryResults.length,
       pagination,

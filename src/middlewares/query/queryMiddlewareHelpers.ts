@@ -22,7 +22,7 @@ export function searchHelper<T extends Document, RT>(
 }
 
 export function populateHelper<T extends Document, RT>(
-  population: PopulateOptions,
+  population: PopulateOptions | PopulateOptions[],
   query: Query<any, Document<unknown, any, T>, {}, any>
 ) {
   return query.populate(population) as RT
@@ -47,7 +47,7 @@ export function questionSortHelper<RT>(
 
 export async function paginationHelper<T, RT>(
   total: number,
-  query: Query<any, Document<unknown, any, T>, {}, any>,
+  query: Query<any, Document<unknown, any, T>, {}, any> | undefined,
   req: Request
 ) {
   const page = parseInt((req.query.page || "1") as string)
@@ -77,5 +77,7 @@ export async function paginationHelper<T, RT>(
         ? undefined
         : (query.skip(startIndex).limit(limit) as RT),
     pagination,
+    startIndex,
+    limit,
   }
 }

@@ -22,16 +22,13 @@ export const askNewQuestion = asyncErrorWrapper(
 
 export const getAllQuestions = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json((req as any).queryResult)
+    res.status(200).json((res as any).queryResult)
   }
 )
 
 export const getSingleQuestion = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json({
-      success: true,
-      data: (req as any).question,
-    })
+    res.status(200).json((res as any).queryResult)
   }
 )
 

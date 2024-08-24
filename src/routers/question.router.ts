@@ -15,6 +15,7 @@ import getQuestionOwnerAccess from "../middlewares/auth/getQuestionOwnerAccess"
 import answer from "./answer.router"
 import questionQueryMiddleware from "../middlewares/query/questionQueryMiddleware"
 import Question from "../models/question.model"
+import answerQueryMiddleware from "../middlewares/query/answerQueryMiddleware"
 
 const router = express.Router()
 
@@ -31,7 +32,23 @@ router.get(
   getAllQuestions
 )
 
-router.get("/:questionId", checkQuestionExist, getSingleQuestion)
+router.get(
+  "/:questionId",
+  checkQuestionExist,
+  answerQueryMiddleware(Question, {
+    population: [
+      {
+        path: "user",
+        select: "name profile_image",
+      },
+      {
+        path: "answers",
+        select: "content",
+      },
+    ],
+  }),
+  getSingleQuestion
+)
 router.get(
   "/:questionId/like",
   [authenticateToken, checkQuestionExist],

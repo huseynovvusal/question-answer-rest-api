@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import asyncErrorWrapper from "express-async-handler"
-import { Model } from "mongoose"
+import { Model, PopulateOptions } from "mongoose"
 
 import { IQuestion } from "../../interfaces/question"
 import {
@@ -12,15 +12,12 @@ import {
 import Question from "../../models/question.model"
 
 type QQMOptions = {
-  population?: {
-    path: string
-    select: string
-  }
+  population?: PopulateOptions
 }
 
 const questionQueryMiddleware = (
   model: Model<IQuestion>,
-  options: QQMOptions | undefined
+  options?: QQMOptions | undefined
 ) => {
   return asyncErrorWrapper(async function (
     req: Request,
@@ -50,7 +47,7 @@ const questionQueryMiddleware = (
 
     const queryResults = await query
 
-    ;(req as any).queryResult = {
+    ;(res as any).queryResult = {
       success: true,
       count: queryResults.length,
       pagination,
