@@ -40,8 +40,7 @@ export const getAllQuestions = asyncErrorWrapper(
 
     if (populate) query.populate(populateObject)
 
-    // Pagination
-
+    //? Pagination
     const page = parseInt((req.query.page || "1") as string)
     const limit = parseInt((req.query.limit || "5") as string)
     const startIndex = (page - 1) * limit
@@ -142,6 +141,8 @@ export const likeQuestion = asyncErrorWrapper(
     } else {
       question.likes.push(userId)
     }
+
+    question.likeCount = question.likes.length
 
     await question.save()
 

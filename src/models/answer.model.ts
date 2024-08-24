@@ -40,6 +40,7 @@ AnswerSchema.pre<IAnswer>("save", async function (next) {
     const question = (await Question.findById(this.question)) as IQuestion
 
     question.answers.push(this.id)
+    question.answerCount = question.answers.length
 
     await question.save()
 

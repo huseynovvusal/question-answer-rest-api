@@ -6,7 +6,9 @@ export interface IQuestion extends Document {
   slug: string
   user: typeof mongoose.Schema.ObjectId
   likes: (typeof mongoose.Schema.ObjectId)[]
+  likeCount: number
   answers: (typeof mongoose.Schema.ObjectId)[]
+  answerCount: number
 
   makeSlug(): string
 }

@@ -94,6 +94,7 @@ export const deleteAnswer = asyncErrorWrapper(
     const question = (await Question.findById(questionId)) as IQuestion
 
     question.answers.splice(question.answers.indexOf(answerId), 1)
+    question.answerCount = question.answers.length
 
     await question.save()
 
