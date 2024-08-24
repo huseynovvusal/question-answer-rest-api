@@ -22,7 +22,13 @@ export const askNewQuestion = asyncErrorWrapper(
 
 export const getAllQuestions = asyncErrorWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { search } = req.query
+    const search = req.query.search
+
+    const populate = true
+    const populateObject = {
+      path: "user",
+      select: "name profile_image",
+    }
 
     let query = Question.find()
 
@@ -32,11 +38,50 @@ export const getAllQuestions = asyncErrorWrapper(
       query = query.where({ title: titleRegex })
     }
 
+    if (populate) query.populate(populateObject)
+
+    // Pagination
+
+    const page = parseInt((req.query.page || "1") as string)
+    const limit = parseInt((req.query.limit || "5") as string)
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+    const total = await Question.countDocuments()
+
+    const pagination: {
+      previous?: {
+        page: number
+        limit: number
+      }
+      next?: {
+        page: number
+        limit: number
+      }
+    } = {}
+
+    if (startIndex > 0) {
+      pagination.previous = {
+        page: page - 1,
+        limit,
+      }
+    }
+
+    if (endIndex < total) {
+      pagination.next = {
+        page: page + 1,
+        limit,
+      }
+    }
+
+    query = query.skip(startIndex).limit(limit)
+
     const questions = await query
 
     res.status(200).json({
       success: true,
+      count: questions.length,
       data: questions,
+      pagination,
     })
   }
 )
