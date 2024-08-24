@@ -74,6 +74,18 @@ export const getAllQuestions = asyncErrorWrapper(
 
     query = query.skip(startIndex).limit(limit)
 
+    //? Sort
+    // most-answered | most-liked
+    const sortKey = req.query.sortBy
+
+    if (sortKey === "most-answered") {
+      query = query.sort("-answerCount")
+    } else if (sortKey === "most-liked") {
+      query = query.sort("-likeCount")
+    } else {
+      query = query.sort("-createdAt")
+    }
+
     const questions = await query
 
     res.status(200).json({

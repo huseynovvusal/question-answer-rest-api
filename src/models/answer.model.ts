@@ -37,12 +37,22 @@ AnswerSchema.pre<IAnswer>("save", async function (next) {
   if (!this.isModified("user")) return next()
 
   try {
-    const question = (await Question.findById(this.question)) as IQuestion
+    // const question = (await Question.findById(this.question)) as IQuestion
 
-    question.answers.push(this.id)
-    question.answerCount = question.answers.length
+    // question.answers.push(this.id)
 
-    await question.save()
+    // // !
+    // console.log(question.answers)
+
+    // question.answerCount = question.answers.length
+    // await question.save()
+
+    // ===========
+    await Question.findByIdAndUpdate(this.question, {
+      $push: { answers: this.id },
+      $inc: { answerCount: 1 },
+    })
+    // ===========
 
     next()
   } catch (error) {

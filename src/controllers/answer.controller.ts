@@ -91,12 +91,17 @@ export const deleteAnswer = asyncErrorWrapper(
 
     await Answer.findByIdAndDelete(answerId)
 
-    const question = (await Question.findById(questionId)) as IQuestion
+    // const question = (await Question.findById(questionId)) as IQuestion
 
-    question.answers.splice(question.answers.indexOf(answerId), 1)
-    question.answerCount = question.answers.length
+    // question.answers.splice(question.answers.indexOf(answerId), 1)
+    // question.answerCount = question.answers.length
 
-    await question.save()
+    // await question.save()
+
+    await Question.findByIdAndUpdate(questionId, {
+      $pull: { answers: answerId },
+      $inc: { answerCount: -1 },
+    })
 
     res.status(200).json({
       success: true,

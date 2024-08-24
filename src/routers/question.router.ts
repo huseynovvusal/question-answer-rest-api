@@ -18,7 +18,7 @@ const router = express.Router()
 
 router.post("/ask", authenticateToken, askNewQuestion)
 router.get("/", getAllQuestions)
-router.get("/:id", checkQuestionExist, getSingleQuestion)
+router.get("/:questionId", checkQuestionExist, getSingleQuestion)
 router.get(
   "/:questionId/like",
   [authenticateToken, checkQuestionExist],

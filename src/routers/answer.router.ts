@@ -6,7 +6,7 @@ import {
   getAllAnswersByQuestion,
   getSingleAnswer,
   likeAnswer,
-} from "../controllers/asnwer.controller"
+} from "../controllers/answer.controller"
 import authenticateToken from "../middlewares/auth/authenticateToken"
 import { checkQuestionAndAnswerExist } from "../middlewares/database/databaseErrorHelpers"
 import getAnswerOwnerAccess from "../middlewares/auth/getAnswerOwnerAccess"
